@@ -1,0 +1,6 @@
+@Ma7aliDashBoard_HostAddress = http://localhost:5159
+
+GET {{Ma7aliDashBoard_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
