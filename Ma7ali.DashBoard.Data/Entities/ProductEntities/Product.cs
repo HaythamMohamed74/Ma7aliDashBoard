@@ -9,7 +9,7 @@ namespace Ma7ali.DashBoard.Data.Entities.ProductEntities
 {
     public class Product : BaseEntity
     {
-        [Required]
+        
         public string Name { get; set; }
         public string Description { get; set; }
 

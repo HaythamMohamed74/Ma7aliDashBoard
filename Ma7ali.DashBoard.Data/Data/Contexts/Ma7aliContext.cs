@@ -1,4 +1,5 @@
-﻿using Ma7ali.DashBoard.Data.Entities.ProductEntities;
+﻿using Ma7ali.DashBoard.Data.Entities.OrderEntities;
+using Ma7ali.DashBoard.Data.Entities.ProductEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,14 @@ namespace Ma7ali.DashBoard.Data.Data.Contexts
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+        
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<DeliveyMethod> DeliveyMethods { get; set; }
     }
 }

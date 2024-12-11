@@ -13,7 +13,8 @@ namespace Ma7ali.DashBoard.Data.Data.Configurations.ProductConfigurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            
+            builder.Property(p=>p.Price).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.Name).IsRequired();
             builder.HasOne(p=>p.Brand).WithMany(b=>b.Products).HasForeignKey(p=>p.BarndId);
             builder.HasOne(p=>p.Category).WithMany(c=>c.Products).HasForeignKey(p=>p.CategoryId);
             builder.HasKey(p=>p.Id);
