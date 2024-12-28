@@ -11,9 +11,11 @@ namespace Ma7ali.DashBoard.Data.Entities.OrderEntities
     {
         [EnumMember(Value ="Pending")]
         Pending,
-        [EnumMember(Value = "PaymentRecevied")]
+        [EnumMember(Value = "PaymentRecevied")] 
         PaymentRecevied,
         [EnumMember(Value = "PaymentFailed")]
         PaymentFailed
+
+
     }
 }

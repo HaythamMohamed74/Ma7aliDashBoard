@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ma7ali.DashBoard.Data.Entities.StoreEntities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace Ma7ali.DashBoard.Data.Entities.ProductEntities
         [DataType(DataType.ImageUrl)]
         public string ImgUrl { get; set; }
         public ICollection<Product> Products { get; set; } = new HashSet<Product>();
+
+        public int? StoreId { get; set; }
+        public Store? Store { get; set; }
+       
 
     }
 }

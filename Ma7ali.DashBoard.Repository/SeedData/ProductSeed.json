@@ -1,0 +1,23 @@
+﻿[
+  {
+    "Name": "Smartphone Pro X",
+    "Description": "A high-end smartphone with an advanced camera and long battery life.",
+    "Price": 999.99,
+    "ImgUrl": "smartphone_pro_x.png",
+    "Stock": 100,
+    "BarndId": 1,
+    "CategoryId": 1,
+    "StoreId": 1
+  },
+  {
+    "Name": "Gaming Laptop G15",
+    "Description": "A powerful gaming laptop with a 15-inch display and top-tier graphics.",
+    "Price": 1499.99,
+    "ImgUrl": "gaming_laptop_g15.png",
+    "Stock": 50,
+    "BarndId": 2,
+    "CategoryId": 2,
+    "StoreId": 1
+  }
+]
+  

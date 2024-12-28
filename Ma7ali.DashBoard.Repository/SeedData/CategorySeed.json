@@ -1,0 +1,15 @@
+[
+    {
+      "Name": "Electronics",
+      "ImgUrl": "electronics_category.png"
+    },
+    {
+      "Name": "Clothing",
+      "ImgUrl": "clothing_category.png"
+    },
+    {
+      "Name": "Home Appliances",
+      "ImgUrl": "home_appliances_category.png"      
+    }
+  ]
+  

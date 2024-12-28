@@ -4,6 +4,7 @@ using Ma7ali.DashBoard.Data.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ma7ali.DashBoard.Data.Data.Migrations
 {
     [DbContext(typeof(Ma7aliContext))]
-    partial class Ma7aliContextModelSnapshot : ModelSnapshot
+    [Migration("20241224080904_updates")]
+    partial class updates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,9 +192,8 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AvailableColor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AvailableColor")
+                        .HasColumnType("int");
 
                     b.Property<int>("BarndId")
                         .HasColumnType("int");
@@ -203,6 +205,10 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -228,31 +234,6 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
                     b.HasIndex("StoreId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.ProductImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.Review", b =>
@@ -408,17 +389,6 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
                     b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.ProductImage", b =>
-                {
-                    b.HasOne("Ma7ali.DashBoard.Data.Entities.ProductEntities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.Review", b =>
                 {
                     b.HasOne("Ma7ali.DashBoard.Data.Entities.ProductEntities.Product", "Product")
@@ -443,11 +413,6 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
             modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.Product", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.StoreEntities.Store", b =>

@@ -1,0 +1,42 @@
+[
+  {
+    "StoreName": "Tech World",
+    "Description": "A tech-focused store for modern gadgets.",
+    "StoreImg": "tech_world.png",
+    "StoreBackGroundLogo": "background_logo.png",
+    "StoreTempletes": 1,
+    "StoreCategories": [
+      {
+        "Name": "Electronics",
+        "ImgUrl": "electronics_category.png"
+      },
+      {
+        "Name": "Accessories",
+        "ImgUrl": "accessories_category.png"
+      }
+    ],
+    "StoreProducts": [
+      {
+        "Name": "4K Television",
+        "Description": "Ultra HD Smart TV.",
+        "Price": 499.99,
+        "ImgUrl": "4k_tv.png",
+        "Stock": 50,
+        "BarndId": 1,
+        "CategoryId": 1
+
+      },
+      {
+        "Name": "Wireless Earbuds",
+        "Description": "Noise-cancelling wireless earbuds.",
+        "Price": 99.99,
+        "ImgUrl": "earbuds.png",
+        "Stock": 150,
+        "BarndId": 1,
+        "CategoryId": 1
+
+      }
+    ]
+  }
+
+]

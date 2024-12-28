@@ -4,6 +4,7 @@ using Ma7ali.DashBoard.Data.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ma7ali.DashBoard.Data.Data.Migrations
 {
     [DbContext(typeof(Ma7aliContext))]
-    partial class Ma7aliContextModelSnapshot : ModelSnapshot
+    [Migration("20241224182120_AddProductImageTable")]
+    partial class AddProductImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,7 +194,8 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
 
                     b.Property<string>("AvailableColor")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("BarndId")
                         .HasColumnType("int");
@@ -232,14 +236,11 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
 
             modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.ProductImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ImageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -248,11 +249,11 @@ namespace Ma7ali.DashBoard.Data.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ImageId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Images");
+                    b.ToTable("ProductImage");
                 });
 
             modelBuilder.Entity("Ma7ali.DashBoard.Data.Entities.ProductEntities.Review", b =>
