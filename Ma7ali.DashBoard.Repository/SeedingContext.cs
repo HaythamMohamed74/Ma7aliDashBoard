@@ -21,13 +21,13 @@ namespace Ma7ali.DashBoard.Repository
             {
                 log.LogInformation("Seeding Data Started...");
                 var Brands = File.ReadAllText("../Ma7ali.DashBoard.Repository/SeedData/BrandSeed.json");
-                var SerlizedBrands = JsonSerializer.Deserialize<List<Brand>>(Brands);
+                //var SerlizedBrands = JsonSerializer.Deserialize<List<Brand>>(Brands);
 
-                if (SerlizedBrands is not null && !ma7AliContext.Brands.Any())
-                {
-                    await ma7AliContext.Brands.AddRangeAsync(SerlizedBrands);
+                //if (SerlizedBrands is not null && !ma7AliContext.Brands.Any())
+                //{
+                //    await ma7AliContext.Brands.AddRangeAsync(SerlizedBrands);
 
-                }
+                //}
 
                 var Categories = File.ReadAllText("../Ma7ali.DashBoard.Repository/SeedData/CategorySeed.json");
                 var SerlizedCategories = JsonSerializer.Deserialize<List<Category>>(Categories);

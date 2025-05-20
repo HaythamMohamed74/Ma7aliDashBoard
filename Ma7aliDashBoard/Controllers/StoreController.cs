@@ -2,183 +2,156 @@
 using Ma7ali.DashBoard.Data.Data.Contexts;
 using Ma7ali.DashBoard.Data.Entities.ProductEntities;
 using Ma7ali.DashBoard.Data.Entities.StoreEntities;
+using Ma7ali.DashBoard.Data.Helper;
 using Ma7ali.DashBoard.Service.Dtos;
-using Ma7aliDashBoard.Api.Dtos;
-using Microsoft.AspNetCore.Http;
+using Ma7ali.DashBoard.Service.Interfaces;
+using Ma7aliDashBoard.Service.Dtos;
+using Ma7aliDashBoard.Shared.Requests;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Logging;
 
 namespace Ma7aliDashBoard.Api.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class StoreController : ControllerBase
     {
+        private readonly IStoreService _storeService;
         private readonly Ma7aliContext _ma7AliContext;
-        private readonly ILoggerFactory _loggerFactory;
 
         public IMapper _Mapper { get; }
 
-        public StoreController(Ma7aliContext ma7AliContext , IMapper autoMapper , ILoggerFactory loggerFactory)
+        public StoreController(IStoreService storeService, Ma7aliContext ma7AliContext, IMapper autoMapper, ILoggerFactory loggerFactory)
         {
+            _storeService = storeService;
             _ma7AliContext = ma7AliContext;
             _Mapper = autoMapper;
-            _loggerFactory = loggerFactory;
         }
 
-
-        [HttpGet("id")]
-        public async Task<ActionResult<StoreDto>> GetStore(int id)
+        // GET: api/Store
+        [HttpGet("all")]
+        public async Task<ActionResult<StoreDto>> GetAllStores()
         {
-            try
-            {
-              
-
-                var store = await _ma7AliContext.Stores
-                                .Include(x => x.StoreCategories)
-                                .Include(x => x.StoreProducts)
-                                    .ThenInclude(p => p.Category)
-                                .Include(x => x.StoreProducts)
-                                .ThenInclude(p=>p.Images).
-                                Include(x => x.StoreProducts).
-                                    ThenInclude(p => p.Brand)
-                                .FirstOrDefaultAsync(s => s.Id == id);
-
-                
-              
-                if (store == null)
-                {
-                    return NotFound();
-                }
-                var StoreMapped = _Mapper.Map<Store, StoreDto>(store);
-                StoreMapped.ProductCount = store.StoreProducts.Count;
-
-
-                return Ok(StoreMapped);
-            }
-            catch (Exception e)
-            {
-               
-               return BadRequest(e.Message);
-
-
-            }
-            
+            return Ok(await _storeService.GetAllStores());
 
         }
-
-
-        [HttpGet] public async Task<ActionResult<StoreDto>>GetStoreByName(string name)
-        {
-            var store = await _ma7AliContext.Stores.
-                Include(s=>s.StoreProducts)
-                .ThenInclude(p=>p.Brand).
-                Include(s=>s.StoreCategories).
-                 Include(s => s.StoreProducts)
-                .ThenInclude(p => p.Category).
-                 Include(s => s.StoreProducts)
-                .ThenInclude(p => p.Images)
-                .FirstOrDefaultAsync(s => s.StoreName.Contains(name));
-            if (store == null)
-            {
-                return NotFound();
-            }
-            var StoreMapped = _Mapper.Map<Store, StoreDto>(store);
-            StoreMapped.ProductCount = store.StoreProducts.Count;
-            return Ok(StoreMapped);
-
-        }
-
-
+        // POST: api/Store
         [HttpPost]
-        public async Task<ActionResult> CreateStore([FromBody] StoreCreateDto storeCreateDto)
+        public async Task<ActionResult<StoreDto>> CreateStore([FromForm] StoreCreateDto storeCreateDto)
         {
-            var log = _loggerFactory.CreateLogger<StoreController>();
-            try
+            if (!ModelState.IsValid)
             {
-                log.LogInformation("Create Store Started...");
-
-                var store = _Mapper.Map<StoreCreateDto, Store>(storeCreateDto);
-                var storeMapped = await _ma7AliContext.Stores.AddAsync(store);
-
-                await _ma7AliContext.SaveChangesAsync();
-
-                var storeDto = _Mapper.Map<Store, StoreDto>(storeMapped.Entity);
-
-                log.LogInformation("Create Store Completed...");
-                return CreatedAtAction(nameof(GetStore), new { id = storeDto.Id }, storeDto);
+                return BadRequest("InValid Model ");
             }
-            catch (Exception e)
-            {
-                log.LogError("An Error Occurred During Creating Store: {ErrorMessage}", e.Message);
-                return BadRequest(e.Message);
-            }
+            var store = await _storeService.CreateStore(storeCreateDto);
+            return CreatedAtAction(nameof(GetStoreById), new { id = store.Id }, store);
+        }
+        // GET: api/Store/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<StoreDto>> GetStoreById(int id)
+        {
+            return Ok(await _storeService.GetStoreById(id));
         }
 
+        // PUT: api/Store/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<StoreDto>> UpdateStore(int id, [FromBody] StoreUpdateDto storeUpdateDto)
+        {
+            if (!ModelState.IsValid || id != storeUpdateDto.Id)
 
-        [HttpDelete("id")]
+                return BadRequest("Invalid Store Data");
+
+            return Ok(await _storeService.EditStore(storeUpdateDto));
+
+        }
+        // DELETE: api/Store/5
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteStore(int id)
         {
-            try
-            {
-                var store = await _ma7AliContext.Stores.FindAsync(id);
-                if (store == null)
-                {
-                    return NotFound();
-                }
-                _ma7AliContext.Stores.Remove(store);
-                await _ma7AliContext.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (Exception e)
-            {
 
-                return BadRequest(e.Message.ToString());
-            }
+            var deletedStore = await _storeService.DeleteStore(id);
+            return NoContent();
 
+        }
+
+        [HttpGet("ByName")]
+        public async Task<ActionResult<List<StoreDto>>> GetStoreByName([FromQuery] string name)
+        {
+           return await  _storeService.GetStoreByName(name);
+        }
+
+        //[HttpGet("name")]
+        //public async Task<ActionResult<StoreDto>> GetStoreByName(string name)
+        //{
+        //    var store = await _ma7AliContext.Stores.
+        //        Include(s => s.StoreProducts).
+        //        Include(s => s.StoreCategories).
+        //         Include(s => s.StoreProducts)
+        //        .ThenInclude(p => p.Category).
+        //         Include(s => s.StoreProducts)
+        //        .ThenInclude(p => p.Images)
+        //        .FirstOrDefaultAsync(s => s.StoreName.Contains(name));
+        //    if (store == null)
+        //    {
+        //        return NotFound("No Store With this Name");
+        //    }
+        //    var StoreMapped = _Mapper.Map<Store, StoreDto>(store);
+        //    StoreMapped.ProductCount = store.StoreProducts.Count;
+        //    return Ok(StoreMapped);
+
+        //}
+
+
+
+        [HttpPost("Pagginated")]
+        public async Task<ActionResult<PagedResult<StoreDto>>> GetPaged([FromBody] PagedRequestDto request)
+        {
+            var result = await _storeService.GetStoresPagedAsync(request);
+            return Ok(result);
         }
 
 
 
 
-        [HttpGet("storeId")]
+
+
+        [HttpGet("ProductsBysoreId")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsInStore(int storeId)
         {
 
-            var products =  await _ma7AliContext.Products.Where(p => p.StoreId == storeId)
-                .Include(x=>x.Brand)
-                .Include(x=>x.Category).Include(p=>p.Images)
+            var products = await _ma7AliContext.Products.Where(p => p.StoreId == storeId)
+
+                .Include(x => x.Category).Include(p => p.Images)
                 .ToListAsync();
-         var ProductMapped=  _Mapper.Map<IEnumerable <Product>,IEnumerable <ProductDto>>(products);
+            var ProductMapped = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
             return Ok(ProductMapped);
 
         }
-        [HttpGet("storeId")]
-        public async Task <ActionResult<IEnumerable<CategoryDto>>> GetCategoriesInStore(int storeId)
+        [HttpGet("CategoriesBysoreId")]
+        public async Task<ActionResult<IEnumerable<CategoryToReturnDto>>> GetCategoriesInStore(int storeId)
         {
 
             try
             {
                 var categories = await _ma7AliContext.Categories.Where(s => s.StoreId == storeId).ToListAsync();
 
-                var CategoryMapped = _Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDto>>(categories);
+                var CategoryMapped = _Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryToReturnDto>>(categories);
 
                 return Ok(CategoryMapped);
             }
-            catch (Exception e )
+            catch (Exception e)
             {
                 return BadRequest(e.ToString());
-                
+
             }
 
         }
 
 
-     
-      
 
-      
+
+
+
     }
 }

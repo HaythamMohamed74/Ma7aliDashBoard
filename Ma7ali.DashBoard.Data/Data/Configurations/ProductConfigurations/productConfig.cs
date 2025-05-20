@@ -14,15 +14,17 @@ namespace Ma7ali.DashBoard.Data.Data.Configurations.ProductConfigurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasKey(p => p.Id);
+            //builder.Property(p => p.BarndId)
+            //    .IsRequired(false);
             builder
                 .Property(p=>p.Price)
                 .HasColumnType("decimal(18,2)");
             builder.
                  Property(p => p.Name)
                 .IsRequired();
-            builder.HasOne(p=>p.Brand)
-                .WithMany(b=>b.Products)
-                .HasForeignKey(p=>p.BarndId);
+            //builder.HasOne(p=>p.Brand)
+            //    .WithMany(b=>b.Products)
+            //    .HasForeignKey(p=>p.BarndId).OnDelete(DeleteBehavior.SetNull);
             builder
                 .HasOne(p=>p.Category)
                 .WithMany(c=>c.Products)
@@ -32,15 +34,15 @@ namespace Ma7ali.DashBoard.Data.Data.Configurations.ProductConfigurations
                 .WithOne(x=>x.Product)
                 .HasForeignKey(i=>i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
-           
+
             builder
                 .Property(p => p.Id)
                 .UseIdentityColumn(1, 1);
             //builder.Property(p => p.AvailableSize).HasConversion(ps=>ps.ToString(),ps=>(ProductSize)Enum.Parse(typeof(ProductSize),ps));
-            builder.Property(p => p.AvailableColor)
-            .HasConversion(
-            c => c.ToString(),
-               v => (ProductColor)Enum.Parse(typeof(ProductColor), v));
+            //builder.Property(p => p.AvailableColor)
+            //.HasConversion(
+            //c => c.ToString(),
+            //   v => (ProductColor)Enum.Parse(typeof(ProductColor), v));
             //    builder.Property(p=>p.AvailableColor)
             //.HasConversion<string>()
             //.HasMaxLength(50);

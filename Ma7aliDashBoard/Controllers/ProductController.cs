@@ -1,71 +1,43 @@
 ﻿using AutoMapper;
 using Ma7ali.DashBoard.Data.Data.Contexts;
 using Ma7ali.DashBoard.Data.Entities.ProductEntities;
-using Ma7ali.DashBoard.Data.Entities.StoreEntities;
 using Ma7ali.DashBoard.Service.Dtos;
-using Ma7aliDashBoard.Api.Dtos;
-using Microsoft.AspNetCore.Http;
+using Ma7ali.DashBoard.Service.Interfaces;
+using Ma7aliDashBoard.Service.Dtos;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Ma7aliDashBoard.Api.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class StoreProductController : ControllerBase
     {
         private readonly Ma7aliContext _ma7AliContext;
         private readonly IMapper _Mapper;
+        private readonly IProductService _productService;
 
-        public StoreProductController(Ma7aliContext ma7AliContext,IMapper mapper)
+        public StoreProductController(Ma7aliContext ma7AliContext, IMapper mapper, IProductService productService)
         {
             _ma7AliContext = ma7AliContext;
             _Mapper = mapper;
+            _productService = productService;
         }
-        [HttpPost]
-        public async Task<ActionResult<CategoryDto>> CreateCategory(CategoryDto categoryCreateDto)
+
+
+
+        [HttpPost("add-product")]
+        public async Task<ActionResult> CreateProduct([FromForm] ProductCreationDto productDto)
         {
-            try
-            {
-                var category = await _ma7AliContext.Categories.AddAsync(_Mapper.Map<CategoryDto, Category>(categoryCreateDto));
 
-                await _ma7AliContext.SaveChangesAsync();
-
-                return Ok(category.Entity);
-            }
-            catch (Exception e)
-            {
-
-                return BadRequest(e.Message.ToString());
-            }
+            var result = await _productService.AddProduct(productDto);
+            return CreatedAtAction(nameof(CreateProduct), new { id = result.Id }, result);
 
         }
-
-
-        [HttpPost]
-        public async Task<ActionResult> CreateProduct(ProductCreationDto productDto)
-        {
-            try
-            {
-             
-                var product = _Mapper.Map<ProductCreationDto, Product>(productDto);
-                if (product is null)
-                {
-                    return NotFound(" Not Found Product To Add ");
-                }
-                await _ma7AliContext.Products.AddAsync(_Mapper.Map<ProductCreationDto, Product>(productDto));
-              await  _ma7AliContext.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception e)
-            {
-
-                return BadRequest(e.Message.ToString());
-            }
-
-        }
-        [HttpPut]
+        
+        [HttpPut("update-product")]
         public async Task<ActionResult<UpdateProductDto>> UpdateProduct(int id, UpdateProductDto productDto)
         {
             try
@@ -90,28 +62,60 @@ namespace Ma7aliDashBoard.Api.Controllers
         }
 
 
+        [HttpGet("Best-seller")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> BestSeller()
+        {
+           var bestSellersMapped= await _productService.GetBestSallerProducts(); 
+            return Ok(bestSellersMapped);
+        }
 
-
-        [HttpGet]
+        [HttpGet("All-products")]
         public ActionResult<ProductDto> GetProducts()
         {
 
-            var products = _ma7AliContext.Products.Include(p=>p.Images).Include(x => x.Brand).Include(x => x.Category).ToList();
+            var products = _ma7AliContext.Products.Include(p=>p.Images).Include(p=>p.Category).ToList();
             var productsMapped = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
             return Ok(productsMapped);
+            //var productsMapped = products.Select(p => new ProductDto
+            //{
+            //    Id = p.Id,
+            //    Name = p.Name,
+            //    Description = p.Description,
+            //    Price = p.Price,
+            //    Stock = p.Stock,
+            //    CategoryId = p.CategoryId,
+            //    CategoryName = p.Category?.Name,
+            //    StoreId = p.StoreId,
+            //    CreationTime = p.CreatedAt,
+            //    //LastUpdateTime = p.la,
+            //    Images = p.Images.Select(img => img.ImageUrl.Replace("\\", "/")).ToList()
+            //});
 
+            //return Ok(productsMapped);
         }
 
-        [HttpGet]
-        public ActionResult<CategoryDto> GetCategories()
+        
+        [HttpGet("Get-page")]
+        public async Task<ActionResult> GetPage(string search , int page =1  ,int size = 10 )
         {
-
-            var categories = _ma7AliContext.Categories.ToList();
-            var CategoryMapped = _Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDto>>(categories);
-            return Ok(CategoryMapped);
-
+            var result=await _productService.GetSortedFilteredPagedAsync(search, page, size);
+          
+            return Ok(result);
         }
-        [HttpDelete]
+
+        //[HttpGet]
+        //public async Task<ActionResult<ProductDto>> GetAllProducts()
+        //{
+        //    //var products = _ma7AliContext.Products.Include(p => p.Images).Include(x => x.Category).ToList();
+        //    //var productsMapped = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
+        //    //return Ok(productsMapped);
+        //    var products = await _productService.GetAllProduct();
+        //    return Ok(products);
+
+        //}
+
+        
+        [HttpDelete("Remove-product")]
         public ActionResult DeleteProduct(int id)
         {
             try

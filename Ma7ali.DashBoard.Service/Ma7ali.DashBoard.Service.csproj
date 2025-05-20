@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ma7ali.DashBoard.Data\Ma7ali.DashBoard.Data.csproj" />
     <ProjectReference Include="..\Ma7ali.DashBoard.Repository\Ma7ali.DashBoard.Repository.csproj" />
+    <ProjectReference Include="..\Ma7aliDashBoard.Shared\Ma7aliDashBoard.Shared.csproj" />
   </ItemGroup>
 
 </Project>

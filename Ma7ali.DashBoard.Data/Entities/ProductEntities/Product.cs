@@ -18,22 +18,20 @@ namespace Ma7ali.DashBoard.Data.Entities.ProductEntities
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
-        //[DataType(DataType.ImageUrl)]   
+        
                                         
         public int Stock { get; set; }
 
-        public Brand Brand { get; set; }
-        public int BarndId { get; set; }
 
         public Category Category { get; set; }
         public int CategoryId { get; set; }
 
-        public ProductColor AvailableColor { get; set; }
+
 
         public int? StoreId { get; set; }
         public Store? Store { get; set; }
 
-        public ICollection<ProductImage> Images { get; set; } = new HashSet<ProductImage>();
+        public virtual ICollection<ProductImage> Images { get; set; } = new HashSet<ProductImage>();
 
     }
 }

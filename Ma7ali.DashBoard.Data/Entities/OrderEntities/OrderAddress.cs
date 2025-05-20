@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ma7ali.DashBoard.Data.Entities.OrderEntities
 {
-    public class OrderAddress
+    public class OrderAddress:BaseEntity
     {
         public string  FirstName { get; set; }
         public string  LastName { get; set; }

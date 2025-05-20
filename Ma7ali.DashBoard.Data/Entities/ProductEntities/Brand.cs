@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Ma7ali.DashBoard.Data.Entities.ProductEntities
 {
-    public class Brand : BaseEntity
-    {
-        public string Name { get; set; }
+    //public class Brand : BaseEntity
+    //{
+    //    public string Name { get; set; }
 
-        [DataType(DataType.ImageUrl)]
-        public string ImgUrl { get; set; }
+    //    [DataType(DataType.ImageUrl)]
+    //    public string ImgUrl { get; set; }
 
-        public ICollection<Product> Products { get; set; } = new HashSet<Product>();
-    }
+    //    public ICollection<Product> Products { get; set; } = new HashSet<Product>();
+    //}
 }
