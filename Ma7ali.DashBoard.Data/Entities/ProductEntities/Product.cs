@@ -33,5 +33,7 @@ namespace Ma7ali.DashBoard.Data.Entities.ProductEntities
 
         public virtual ICollection<ProductImage> Images { get; set; } = new HashSet<ProductImage>();
 
+        public virtual ICollection<Review>reviews { get; set; } = new HashSet<Review>();
+
     }
 }

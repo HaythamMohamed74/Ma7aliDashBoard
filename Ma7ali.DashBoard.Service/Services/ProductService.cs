@@ -76,9 +76,20 @@ namespace Ma7ali.DashBoard.Service.Services
             //return await _productRepository.GetBestSallerProductsAsync();   
         }
 
-        public Task<ProductDto> GetProductById(int id)
+        public async Task<ICollection<ProductDto>> GetTopRatedProducts()
         {
-            throw new NotImplementedException();
+            var topRatedProducts = await _productRepository.GetTopRatedProductsAsync();
+            var topRatedProductsDto = _mapper.Map<ICollection<ProductDto>>(topRatedProducts);
+            return topRatedProductsDto;
+            //return await _productRepository.GetTopRatedProductsAsync();
+        }
+
+        public async Task<ProductDto> GetProductById(int id)
+        {
+            
+          var product= await _productRepository.GetByIdAsync(id);
+            var productDto = _mapper.Map<ProductDto>(product);
+            return productDto;
         }
 
         public Task<PagedResult<ProductDto>> GetSortedFilteredPagedAsync(string search, int page, int size)

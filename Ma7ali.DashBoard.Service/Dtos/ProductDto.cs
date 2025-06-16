@@ -21,7 +21,7 @@ namespace Ma7ali.DashBoard.Service.Dtos
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
 
-     
+        public double AvgRateing { get; set; }
 
         public int? StoreId { get; set; }
         public DateTime CreationTime { get; set; }=DateTime.Now;

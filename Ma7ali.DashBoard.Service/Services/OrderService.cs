@@ -86,7 +86,7 @@ namespace Ma7ali.DashBoard.Service.Services
         {
             var orders = await _context.Orders
                 .Include(o => o.OrderItems)
-                .Include(o => o.DeliveyMethod)
+                .Include(o => o.DeliveyMethod).Include(o=>o.OrderAddress)
                 .Where(o => o.BuyerEmail == buyerId)
                 .OrderByDescending(o => o.OrderTime)
                 .ToListAsync();

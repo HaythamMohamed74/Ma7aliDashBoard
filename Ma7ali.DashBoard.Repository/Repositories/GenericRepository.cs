@@ -48,7 +48,9 @@ namespace Ma7ali.DashBoard.Repository.Repositories
         public async Task<TEntity> GetByIdAsync(int id)
         {
            
+
             return await _dbSet.FindAsync(id);
+          
         }
 
         public async Task<PagedResult<TEntity>> GetSortedFilteredPagedAsync<TKey>(Expression<Func<TEntity, TKey>> orderBy, Expression<Func<TEntity, bool>> searchPredicate = null, bool ascending = true, int pageNumber = 1, int pageSize = 10)

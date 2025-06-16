@@ -4,6 +4,7 @@ using Ma7ali.DashBoard.Data.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ma7ali.DashBoard.Data.Migrations
 {
     [DbContext(typeof(Ma7aliContext))]
-    partial class Ma7aliContextModelSnapshot : ModelSnapshot
+    [Migration("20250522112734_ReviewUpdated")]
+    partial class ReviewUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

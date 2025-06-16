@@ -67,5 +67,20 @@ namespace Ma7ali.DashBoard.Repository.Repositories
         {
             return await _ma7AliContext.Set<Product>().Include(x => x.Images).FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<ICollection<Product>> GetTopRatedProductsAsync()
+        {
+            var topRatedProducts = await _ma7AliContext.Products
+                .Include(p => p.Images)
+                .Include(p => p.Category)
+                .Include(p=>p.reviews)
+                  .Where(p => p.reviews.Any()) 
+                  .OrderByDescending(p => p.reviews.Average(r => r.Rating))
+                .Take(10)
+                .ToListAsync();
+
+            return topRatedProducts;
+
+        }
     }
 }

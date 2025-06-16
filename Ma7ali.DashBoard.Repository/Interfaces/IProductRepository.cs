@@ -11,5 +11,7 @@ namespace Ma7ali.DashBoard.Repository.Interfaces
     {
         public  Task<Product> GetProductByIdAsync(int id);
         public Task<ICollection<Product>> GetBestSallerProductsAsync();
+
+        public Task<ICollection<Product>> GetTopRatedProductsAsync();
     }
 }

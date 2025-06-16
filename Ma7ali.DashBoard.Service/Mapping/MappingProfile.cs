@@ -15,6 +15,9 @@ namespace Ma7aliDashBoard.Service.Mapping
             CreateMap<Product, ProductDto>()
                 .ForMember(d => d.CategoryName, o => o.MapFrom(s => s.Category.Name))
                 .ForMember(d => d.Images, o => o.MapFrom(s => s.Images))
+                 .ForMember(dest => dest.AvgRateing,
+                       opt => opt.MapFrom(src => src.reviews.Any() ?
+                           Math.Round(src.reviews.Average(r => r.Rating), 2) : 0))
                 .ReverseMap();
             CreateMap<Product, ProductDto>()
     .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images.Select(i => i.ImageUrl.Replace("\\", "/")).ToList()));
@@ -46,7 +49,7 @@ namespace Ma7aliDashBoard.Service.Mapping
             CreateMap<Order, OrderDto>()
                 .ForMember(d => d.Total, o => o.MapFrom(s => s.GetTotal()));
             CreateMap<OrderItem, OrderItemDto>();
-            CreateMap<OrderAddress, OrderAddressDto>();
+            CreateMap<OrderAddress, OrderAddressDto>().ReverseMap();
             CreateMap<DeliveyMethod, DeliveryMethodDto>();
         }
     }

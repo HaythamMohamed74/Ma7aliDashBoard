@@ -25,5 +25,7 @@ namespace Ma7ali.DashBoard.Service.Interfaces
         Task<PagedResult<ProductDto>> GetSortedFilteredPagedAsync(string search ,int page, int size);
 
         Task <ICollection<ProductDto>>GetBestSallerProducts();
+
+        public Task<ICollection<ProductDto>> GetTopRatedProducts();
     }
 }
